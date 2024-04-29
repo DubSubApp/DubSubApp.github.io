@@ -1,10 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  output: "export",
+  images: {
+    loader: 'akamai',
+    path: '',
+    unoptimized: true,
+    domains: ["localhost"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+        port: "",
+      },
+    ],
+  },
+};
 
- // Add basePath
-  basePath: '/github-pages',
-
-}
-
-module.exports = nextConfig
+module.exports = nextConfig;
