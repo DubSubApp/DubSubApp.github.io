@@ -18,9 +18,9 @@ const Contact: React.FC = () => {
 
   const handleDub = () => {
     if (selectedFile && language !== '') {
-      fetch('YOUR_API_URL', {
+      fetch('http://127.0.0.1:5000', {
         method: 'POST',
-        body: JSON.stringify({ file: selectedFile, language }),
+        body: JSON.stringify({ video: selectedFile, config: {"target_lang":"arabic","enable_lip_sync":true} }),
         headers: {
           'Content-Type': 'application/json'
         }
