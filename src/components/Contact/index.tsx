@@ -5,6 +5,7 @@ const Contact: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [language, setLanguage] = useState<string>('');
   const [outputVideo, setOutputVideo] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false); // State to track loading
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -18,21 +19,24 @@ const Contact: React.FC = () => {
 
   const handleDub = () => {
     if (selectedFile && language !== '') {
-      fetch('http://127.0.0.1:5000', {
-        method: 'POST',
-        body: JSON.stringify({ video: selectedFile, config: {"target_lang":"arabic","enable_lip_sync":true} }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Dubbing successful:', data);
-        setOutputVideo(data.outputVideo); // Assuming your API returns the output video URL
-      })
-      .catch(error => {
-        console.error('Error dubbing:', error);
-      });
+      setLoading(true); // Set loading state to true
+      // fetch('http://127.0.0.1:5000', {
+      //   method: 'POST',
+      //   body: JSON.stringify({ video: selectedFile, config: {"target_lang":"arabic","enable_lip_sync":true} }),
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   }
+      // })
+      // .then(response => response.json())
+      // .then(data => {
+      //   console.log('Dubbing successful:', data);
+      //   setOutputVideo(data.outputVideo);
+      //   setLoading(false); // Set loading state to false after response
+      // })
+      // .catch(error => {
+      //   console.error('Error dubbing:', error);
+      //   setLoading(false); // Set loading state to false on error
+      // });
     } else {
       console.log('Please select a file and choose a language.');
     }
@@ -59,10 +63,10 @@ const Contact: React.FC = () => {
         </div>
         <button
           onClick={handleDub}
-          disabled={buttonDisabled}
-          style={{ width: '100%', padding: '0.5rem 0', borderRadius: '0.375rem', backgroundColor: buttonDisabled ? '#ccc' : '#4f46e5', color: '#fff', cursor: buttonDisabled ? 'not-allowed' : 'pointer' }}
+          disabled={buttonDisabled || loading} // Disable button when loading
+          style={{ width: '100%', padding: '0.5rem 0', borderRadius: '0.375rem', backgroundColor: (buttonDisabled || loading) ? '#ccc' : '#4f46e5', color: '#fff', cursor: (buttonDisabled || loading) ? 'not-allowed' : 'pointer' }}
         >
-          Dub
+          {loading ? 'Working on your video...' : 'Dub'}
         </button>
         {outputVideo && (
           <div style={{ marginTop: '1rem' }}>
